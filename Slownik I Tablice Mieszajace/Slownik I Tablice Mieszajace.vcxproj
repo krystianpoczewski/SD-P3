@@ -128,12 +128,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dictionary.cpp" />
+    <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="HashTableOpenAdressing.cpp" />
     <ClCompile Include="Slownik I Tablice Mieszajace.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dictionary.h" />
+    <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="HashTable.h" />
+    <ClInclude Include="HashTableOpenAdressing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
