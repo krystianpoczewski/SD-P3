@@ -3,7 +3,7 @@
 
 
 
-int HashTableOpenAdressing::QuardiaticProbing(int key)
+int HashTableOpenAdressing::QuadraticProbing(int key)
 {
 	return (key) % _capacity;
 }
@@ -12,7 +12,7 @@ unsigned int HashTableOpenAdressing::HashFunction(int key, int probeCounter)
 {
 	if (key < 0)
 		key *= -1;
-	return (QuardiaticProbing(key) + probeCounter * probeCounter + probeCounter) % _capacity;
+	return (QuadraticProbing(key) + probeCounter * probeCounter + probeCounter) % _capacity;
 }
 
 HashTableOpenAdressing::~HashTableOpenAdressing()

@@ -1,5 +1,6 @@
 #pragma once
 #include "HashTable.h"
+#include "HashTableOpenAdressing.h"
 
 class DynamicArray
 {

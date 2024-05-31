@@ -2,10 +2,12 @@
 #include "Dictionary.h"
 #include "HashTable.h"
 #include "HashTableOpenAdressing.h"
+#include "BinarySearchTree.h"
+#include "HashTableBSTSeperateChaining.h"
 
 int main()
 {
-    HashTableOpenAdressing ht;
+    /*HashTableOpenAdressing ht;
     ht.PrintAll();
     ht.Insert(2, 15);
     ht.Insert(3, 22);
@@ -28,6 +30,33 @@ int main()
     ht.Remove(10);
     ht.Remove(18);
     ht.Remove(0);
-    ht.PrintAll();
+    ht.PrintAll();*/
+
+    /*BinarySearchTree bst;
+    bst.Insert(12,33);
+    bst.Insert(22,44);
+    bst.Insert(33,55);
+    bst.Insert(1,55);
+    bst.Insert(5,55);
+    bst.Insert(4,55);
+    bst.Insert(444,55);
+    bst.PrintAll();
+    Node* n = bst.Find(444);
+    std::cout << n->value.key << " " << n->value.value << std::endl;
+    Node nd = bst.Remove(4);
+    std::cout << nd.value.key << " " << nd.value.value << std::endl;
+    bst.PrintAll();*/
+
+    HashTableBSTSeperateChaining htbts;
+    htbts.Insert(12, 12);
+    htbts.Insert(111, 22);
+    htbts.Insert(11, 11);
+    htbts.Insert(9, 11);
+    htbts.Insert(22, 11);
+    htbts.Insert(76, 11);
+    htbts.Insert(1251, 11);
+    htbts.Remove(12);
+    htbts.PrintAll();
+
 }
 

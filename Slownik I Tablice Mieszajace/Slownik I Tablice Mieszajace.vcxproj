@@ -127,16 +127,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BinarySearchTree.cpp" />
     <ClCompile Include="Dictionary.cpp" />
     <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="HashTableBSTSeperateChaining.cpp" />
     <ClCompile Include="HashTableOpenAdressing.cpp" />
     <ClCompile Include="Slownik I Tablice Mieszajace.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BinarySearchTree.h" />
     <ClInclude Include="Dictionary.h" />
     <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="HashTable.h" />
+    <ClInclude Include="HashTableBSTSeperateChaining.h" />
     <ClInclude Include="HashTableOpenAdressing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
