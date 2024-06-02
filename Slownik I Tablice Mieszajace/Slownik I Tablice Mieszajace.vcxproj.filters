@@ -36,6 +36,9 @@
     <ClCompile Include="HashTableBSTSeperateChaining.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HashTableCuckooHashing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dictionary.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HashTableBSTSeperateChaining.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTableCuckooHashing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

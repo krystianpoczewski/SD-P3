@@ -4,6 +4,8 @@
 #include "HashTableOpenAdressing.h"
 #include "BinarySearchTree.h"
 #include "HashTableBSTSeperateChaining.h"
+#include "HashTableCuckooHashing.h"
+
 
 int main()
 {
@@ -64,5 +66,31 @@ int main()
     htbts.Remove(12);
     htbts.PrintAll();*/
 
+
+
+    HashTableCuckooHashing ht;
+    ht.PrintAll();
+    ht.Insert(2, 15);
+    ht.Insert(10, 15);
+    ht.Remove(2);
+    ht.PrintAll();
+    ht.Insert(3, 22);
+    ht.Insert(10, 151);
+    ht.Insert(18, 1);
+    ht.Insert(1, 11);
+    ht.Insert(0, 11);
+    ht.Insert(4, 11);
+    ht.Insert(5, 11);
+    ht.Insert(618, 11);
+    ht.Insert(20, 11);
+    ht.Insert(400, 11);
+    ht.Insert(600, 11);
+    ht.Insert(70000, 11);
+    ht.PrintAll();
+
+    ht.Get(10);
+
+    
+    //ht.PrintAll();
 }
 

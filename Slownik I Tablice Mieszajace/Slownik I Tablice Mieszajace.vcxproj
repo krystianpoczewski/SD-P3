@@ -132,6 +132,7 @@
     <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="HashTable.cpp" />
     <ClCompile Include="HashTableBSTSeperateChaining.cpp" />
+    <ClCompile Include="HashTableCuckooHashing.cpp" />
     <ClCompile Include="HashTableOpenAdressing.cpp" />
     <ClCompile Include="Slownik I Tablice Mieszajace.cpp" />
   </ItemGroup>
@@ -141,6 +142,7 @@
     <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="HashTableBSTSeperateChaining.h" />
+    <ClInclude Include="HashTableCuckooHashing.h" />
     <ClInclude Include="HashTableOpenAdressing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
