@@ -111,6 +111,7 @@ void BinarySearchTree::PrintElement(Node* node, std::string message) const
 	if (node == nullptr)
 		return;
 	std::cout << message << ":: Key :: " << node->value.key << ", Value :: " << node->value.value << std::endl;
+
 	PrintElement(node->leftChild, "Left Child");
 	PrintElement(node->rightChild, "Right Child");
 }
@@ -153,7 +154,7 @@ Node BinarySearchTree::Remove(int value)
 
 	Node& deletedNode = *(new Node());
 	bool& found = *(new bool(false));
-	removeRecursivly(root, value, deletedNode, found);
+	root = removeRecursivly(root, value, deletedNode, found);
 	if (!found) {
 		std::cout << "Unable to find element with specified key" << std::endl;
 		return Node();

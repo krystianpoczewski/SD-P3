@@ -1,11 +1,12 @@
 #pragma once
 #include "HashTable.h"
 
-//HASH TABLE WITH OPEN ADDRESSING AND Quadratic PROBING
+//HASH TABLE WITH OPEN ADDRESSING AND LINEAR PROBING
 
 enum StateOfKeyValuePair {
 	NOT_INITIALIZED,
-	ADDED
+	ADDED,
+	DELETED
 };
 
 struct KeyValuePair {
@@ -18,7 +19,7 @@ struct KeyValuePair {
 	KeyValuePair(int key, int value) {
 		this->key = key;
 		this->value = value;
-		state = StateOfKeyValuePair::NOT_INITIALIZED;
+		state = StateOfKeyValuePair::ADDED;
 	}
 };
 
@@ -26,10 +27,10 @@ class HashTableOpenAdressing : public HashTable
 {
 private:
 	KeyValuePair* _dynamicArray;
-	int _size, _capacity;
+	int _size, _capacity, _sizeWithTombstones;
 	const float _loadFactorTreshhold = 0.6;
-	int QuadraticProbing(int key);
-	unsigned int HashFunction(int key, int probeCounter);
+	unsigned int HashFunction(int key, int probeCounter) const;
+	void Resize(int newCapacity);
 public:
 	~HashTableOpenAdressing();
 	HashTableOpenAdressing();

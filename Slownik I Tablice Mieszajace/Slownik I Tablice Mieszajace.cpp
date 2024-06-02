@@ -19,6 +19,9 @@ int main()
     ht.Insert(5, 11);
     ht.Insert(618, 11);
     ht.Insert(20, 11);
+    ht.Insert(400, 11);
+    ht.Insert(600, 11);
+    ht.Insert(70000, 11);
     ht.PrintAll();
 
     ht.Get(10);
@@ -30,6 +33,8 @@ int main()
     ht.Remove(10);
     ht.Remove(18);
     ht.Remove(0);
+    ht.Insert(6, 11);
+    ht.Insert(8, 11);
     ht.PrintAll();*/
 
     /*BinarySearchTree bst;
@@ -47,8 +52,9 @@ int main()
     std::cout << nd.value.key << " " << nd.value.value << std::endl;
     bst.PrintAll();*/
 
-    HashTableBSTSeperateChaining htbts;
+    /*BinarySearchTree htbts;
     htbts.Insert(12, 12);
+    htbts.Remove(12);
     htbts.Insert(111, 22);
     htbts.Insert(11, 11);
     htbts.Insert(9, 11);
@@ -56,7 +62,7 @@ int main()
     htbts.Insert(76, 11);
     htbts.Insert(1251, 11);
     htbts.Remove(12);
-    htbts.PrintAll();
+    htbts.PrintAll();*/
 
 }
 

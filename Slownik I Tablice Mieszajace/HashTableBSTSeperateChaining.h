@@ -7,7 +7,6 @@ class HashTableBSTSeperateChaining : public HashTable, protected BinarySearchTre
 private:
 	BinarySearchTree* bst;
 	int numberOfBuckets;
-	int QuadraticProbing(int key);
 	unsigned int HashFunction(int key);
 public:
 	~HashTableBSTSeperateChaining();

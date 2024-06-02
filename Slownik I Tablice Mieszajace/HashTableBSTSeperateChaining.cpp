@@ -1,15 +1,11 @@
 #include "HashTableBSTSeperateChaining.h"
 
-int HashTableBSTSeperateChaining::QuadraticProbing(int key)
-{
-     return (key) % numberOfBuckets;
-}
 
 unsigned int HashTableBSTSeperateChaining::HashFunction(int key)
 {
     if (key < 0)
         key *= -1;
-    return (QuadraticProbing(key)) % numberOfBuckets;
+    return key % numberOfBuckets;
 }
 
 HashTableBSTSeperateChaining::~HashTableBSTSeperateChaining()
@@ -35,7 +31,8 @@ void HashTableBSTSeperateChaining::Insert(int key, int value)
 KeyValuePairBST HashTableBSTSeperateChaining::Remove(int key)
 {
     unsigned int hashValue = HashFunction(key);
-    return bst[hashValue].Remove(key).value;
+    KeyValuePairBST deletedValue =  bst[hashValue].Remove(key).value;
+    return deletedValue;
 }
 
 KeyValuePairBST* HashTableBSTSeperateChaining::Get(int key)
