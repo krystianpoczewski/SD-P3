@@ -33,7 +33,7 @@ public:
     void SetState(StateOfKeyValuePair newState) {
         state = newState;
     }
-    StateOfKeyValuePair GetState() { return state; }
+    StateOfKeyValuePair GetState() const { return state; }
 };
 
 class KeyValuePairCuckoo : public KeyValuePair {
@@ -45,7 +45,7 @@ public:
 
     KeyValuePairCuckoo(int key, int value) : KeyValuePair(key, value), added(true) {}
 
-    bool GetState() { return added; }
+    bool GetState() const { return added; }
 
     void SetState(bool addedState) {
         added = addedState;

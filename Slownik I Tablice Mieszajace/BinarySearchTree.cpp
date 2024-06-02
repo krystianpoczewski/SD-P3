@@ -189,6 +189,10 @@ int BinarySearchTree::GetSize() const
 
 void BinarySearchTree::PrintAll() const
 {
+	if (root == nullptr) {
+		std::cout << "BST is empty!" << std::endl;
+		return;
+	}
 	PrintElement(root, "Root");
 }
 

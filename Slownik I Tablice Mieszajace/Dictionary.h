@@ -1,24 +1,26 @@
 #pragma once
 #include "HashTable.h"
+#include "HashTableBSTSeperateChaining.h"
+#include "HashTableCuckooHashing.h"
+#include "HashTableOpenAdressing.h"
 
 class Dictionary
 {
 private:
 	HashTable* _hashTable;
 
-
 public:
-	Dictionary(HashTable* hashTable);
+	Dictionary(int type);
 	~Dictionary();
 
 	void Insert(int key, int value);
-	void Remove(int key);
-	void Get(int key);
+	KeyValuePair Remove(int key);
+	KeyValuePair* Get(int key);
 
 
-	int GetSize();
-	bool isEmpty();
-	void PrintAll();
-
+	int GetSize() const;
+	bool isEmpty() const;
+	void PrintAll() const;
+	void Clear();
 };
 

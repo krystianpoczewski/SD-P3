@@ -51,7 +51,10 @@ void HashTableBSTSeperateChaining::PrintAll() const
 {
     for (int i = 0; i < numberOfBuckets; i++) {
         std::cout << "Bucket number " << i << ". " << std::endl;
-        bst[i].PrintAll();
+        if(!bst[i].isEmpty())
+            bst[i].PrintAll();
+        else
+            std::cout << "Bucket is empty!" << std::endl;
     }
 }
 

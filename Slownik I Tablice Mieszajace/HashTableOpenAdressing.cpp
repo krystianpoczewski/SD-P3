@@ -73,7 +73,7 @@ void HashTableOpenAdressing::Insert(int key, int value)
 
 KeyValuePair HashTableOpenAdressing::Remove(int key)
 {
-	if (_capacity > 8 && ((float)_sizeWithTombstones / _capacity) * 3 <= _loadFactorTreshhold) {
+	if (_capacity > 8 && ((float)_size / _capacity) * 3 <= _loadFactorTreshhold) {
 		Resize(_capacity / 3);
 	}
 

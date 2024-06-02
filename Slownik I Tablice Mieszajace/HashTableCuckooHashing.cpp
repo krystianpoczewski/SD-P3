@@ -8,7 +8,7 @@ void HashTableCuckooHashing::Resize(int newCapacity)
 
 	KeyValuePairCuckoo** oldHashTable = _hashTable;
 	_hashTable = InitTable(_capacity);
-
+	_size = 0;
 	for (int i = 0; i < _numberOfTables; i++) {
 		for (int j = 0; j < oldCapacity; j++) {
 			if (oldHashTable[i][j].GetState()) {
@@ -69,7 +69,7 @@ HashTableCuckooHashing::HashTableCuckooHashing()
 
 void HashTableCuckooHashing::Insert(int key, int value)
 {
-	if (((float)_size / _capacity) / 2 >= _loadFactorTreshold)
+	if (((float)_size / (_capacity*2)) >= _loadFactorTreshold)
 	{
 		Resize(_capacity * 2);
 	}
@@ -121,7 +121,7 @@ KeyValuePair HashTableCuckooHashing::Remove(int key)
 		if (_hashTable[i][pos].GetKey() == key) {
 			KeyValuePairCuckoo temp = _hashTable[i][pos];
 			_hashTable[i][pos] = KeyValuePairCuckoo();
-			return temp;
+			return (KeyValuePair)temp;
 		}
 	}
 	std::cout << "Unable to find this key in hash table" << std::endl;
