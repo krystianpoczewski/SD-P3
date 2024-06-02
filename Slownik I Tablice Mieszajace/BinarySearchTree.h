@@ -2,18 +2,11 @@
 #include "HashTable.h"
 #include <iostream>
 
-struct KeyValuePairBST {
-	int key;
-	int value;
-	KeyValuePairBST() {}
-	KeyValuePairBST(int key, int value) : key(key), value(value) {}
-};
-
 struct Node {
-	KeyValuePairBST value;
+	KeyValuePair value;
 	Node* leftChild;
 	Node* rightChild;
-	Node(KeyValuePairBST value) : value(value) {}
+	Node(KeyValuePair value) : value(value) {}
 	Node(){ }
 };
 
@@ -23,7 +16,7 @@ private:
 	Node* root;
 	int _size;
 	Node* findMin(Node* node);
-	Node* insertRecursivly(Node* node, KeyValuePairBST element);
+	Node* insertRecursivly(Node* node, KeyValuePair element);
 	Node* removeRecursivly(Node* node, int key,Node& deletedNode, bool& found);
 	Node* findRecursivly(Node* node, int key);
 	void PrintElement(Node* node, std::string message) const;

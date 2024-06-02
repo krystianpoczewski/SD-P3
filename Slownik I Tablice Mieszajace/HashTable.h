@@ -1,15 +1,13 @@
 #pragma once
-
+#include "KeyValuePair.h"
 
 class HashTable
 {
-protected:
-	/*virtual unsigned int HashFunction(int key, int probeCounter) = 0;*/
 public:
 	virtual ~HashTable() {}
 	virtual void Insert(int key, int value) = 0;
-	/*virtual void Remove(int key) = 0;
-	virtual KeyValuePair Get(int key) = 0;*/
+	virtual KeyValuePair Remove(int key) = 0;
+	virtual KeyValuePair* Get(int key) = 0;
 	virtual void PrintAll() const = 0;
 	virtual int GetSize() const = 0;
 	virtual void Clear() = 0;

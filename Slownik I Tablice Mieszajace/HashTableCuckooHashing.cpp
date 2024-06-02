@@ -11,8 +11,8 @@ void HashTableCuckooHashing::Resize(int newCapacity)
 
 	for (int i = 0; i < _numberOfTables; i++) {
 		for (int j = 0; j < oldCapacity; j++) {
-			if (oldHashTable[i][j].added) {
-				Insert(oldHashTable[i][j].key, oldHashTable[i][j].value);
+			if (oldHashTable[i][j].GetState()) {
+				Insert(oldHashTable[i][j].GetKey(), oldHashTable[i][j].GetValue());
 			}
 		}
 	}
@@ -31,8 +31,8 @@ void HashTableCuckooHashing::Rehash(int key, int value)
 	_size = 0;
 	for (int i = 0; i < _numberOfTables; i++) {
 		for (int j = 0; j < _capacity; j++) {
-			if (oldArr[i][j].added) {
-				Insert(oldArr[i][j].key, oldArr[i][j].value);
+			if (oldArr[i][j].GetState()) {
+				Insert(oldArr[i][j].GetKey(), oldArr[i][j].GetValue());
 			}
 		}
 	}
@@ -83,22 +83,22 @@ void HashTableCuckooHashing::Insert(int key, int value)
 	while (count <= _cycleTreshhold) {
 		unsigned int index = HashFunction(currentKey, tableID);
 
-		if (_hashTable[tableID][index].added && _hashTable[tableID][index].key == key) {
-			_hashTable[tableID][index].value = value;
+		if (_hashTable[tableID][index].GetState() && _hashTable[tableID][index].GetKey() == key) {
+			_hashTable[tableID][index].SetValue(value);
 			return;
 		}
 
-		if (!_hashTable[tableID][index].added) {
+		if (!_hashTable[tableID][index].GetState()) {
 			_hashTable[tableID][index] = KeyValuePairCuckoo(currentKey, currentValue);
 			_size++;
 			return;
 		}
 
-		int tempKey = _hashTable[tableID][index].key;
-		int tempValue = _hashTable[tableID][index].value;
+		int tempKey = _hashTable[tableID][index].GetKey();
+		int tempValue = _hashTable[tableID][index].GetValue();
 
-		_hashTable[tableID][index].key = currentKey;
-		_hashTable[tableID][index].value = currentValue;
+		_hashTable[tableID][index].SetKey(currentKey);
+		_hashTable[tableID][index].SetValue(currentValue);
 		currentKey = tempKey;
 		currentValue = tempValue;
 
@@ -108,9 +108,9 @@ void HashTableCuckooHashing::Insert(int key, int value)
 	Rehash(currentKey, currentValue);
 }
 
-KeyValuePairCuckoo HashTableCuckooHashing::Remove(int key)
+KeyValuePair HashTableCuckooHashing::Remove(int key)
 {
-	if (_capacity >= 8 && (float)_size / _capacity <= _loadFactorTreshold * 2)
+	if (_capacity > 8 && (float)_size / _capacity <= _loadFactorTreshold * 2)
 	{
 		Resize(_capacity / 2);
 	}
@@ -118,7 +118,7 @@ KeyValuePairCuckoo HashTableCuckooHashing::Remove(int key)
 
 	for (int i = 0; i < _numberOfTables; i++) {
 		unsigned int pos = HashFunction(key, i);
-		if (_hashTable[i][pos].key == key) {
+		if (_hashTable[i][pos].GetKey() == key) {
 			KeyValuePairCuckoo temp = _hashTable[i][pos];
 			_hashTable[i][pos] = KeyValuePairCuckoo();
 			return temp;
@@ -129,11 +129,11 @@ KeyValuePairCuckoo HashTableCuckooHashing::Remove(int key)
 	return KeyValuePairCuckoo();
 }
 
-KeyValuePairCuckoo* HashTableCuckooHashing::Get(int key)
+KeyValuePair* HashTableCuckooHashing::Get(int key)
 {
 	for (int i = 0; i < _numberOfTables; i++) {
 		unsigned int pos = HashFunction(key, i);
-		if (_hashTable[i][pos].key == key) {
+		if (_hashTable[i][pos].GetKey() == key) {
 			KeyValuePairCuckoo* temp = &_hashTable[i][pos];
 			return temp;
 		}
@@ -147,8 +147,8 @@ void HashTableCuckooHashing::PrintAll() const
 	for (int i = 0; i < _numberOfTables; i++) {
 		std::cout << "Table number " << i << "." << std::endl;
 		for (int j = 0; j < _capacity; j++) {
-			if (_hashTable[i][j].added)
-				std::cout << j << ". KEY::" << _hashTable[i][j].key << ", VALUE::" << _hashTable[i][j].value << std::endl;
+			if (_hashTable[i][j].GetState())
+				std::cout << j << ". KEY::" << _hashTable[i][j].GetKey() << ", VALUE::" << _hashTable[i][j].GetValue() << std::endl;
 			else
 				std::cout << j << ". NOT ADDED" << std::endl;
 		}

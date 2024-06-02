@@ -1,14 +1,7 @@
 #pragma once
 #include "HashTable.h"
+#include "KeyValuePair.h"
 
-struct KeyValuePairCuckoo
-{
-	int key;
-	int value;
-	bool added;
-	KeyValuePairCuckoo() : added(false) {}
-	KeyValuePairCuckoo(int key, int value) : key(key), value(value), added(true) {}
-};
 
 class HashTableCuckooHashing : public HashTable
 {
@@ -28,8 +21,8 @@ public:
 	~HashTableCuckooHashing();
 	HashTableCuckooHashing();
 	void Insert(int key, int value) override;
-	KeyValuePairCuckoo Remove(int key);
-	KeyValuePairCuckoo* Get(int key);
+	KeyValuePair Remove(int key);
+	KeyValuePair* Get(int key);
 	void PrintAll() const override;
 	int GetSize() const override;
 	void Clear() override;

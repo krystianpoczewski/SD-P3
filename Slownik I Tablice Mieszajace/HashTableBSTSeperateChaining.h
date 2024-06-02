@@ -1,6 +1,7 @@
 #pragma once
 #include "BinarySearchTree.h"
 #include "HashTable.h"
+#include "KeyValuePair.h"
 
 class HashTableBSTSeperateChaining : public HashTable, protected BinarySearchTree
 {
@@ -12,8 +13,8 @@ public:
 	~HashTableBSTSeperateChaining();
 	HashTableBSTSeperateChaining();
 	void Insert(int key, int value) override;
-	KeyValuePairBST Remove(int key);
-	KeyValuePairBST* Get(int key);
+	KeyValuePair Remove(int key);
+	KeyValuePair* Get(int key);
 	void PrintAll() const override;
 	int GetSize() const override;
 	bool IsEmpty() const override;

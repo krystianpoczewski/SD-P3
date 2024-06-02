@@ -28,14 +28,14 @@ void HashTableBSTSeperateChaining::Insert(int key, int value)
     bst[hashValue].Insert(key, value);
 }
 
-KeyValuePairBST HashTableBSTSeperateChaining::Remove(int key)
+KeyValuePair HashTableBSTSeperateChaining::Remove(int key)
 {
     unsigned int hashValue = HashFunction(key);
-    KeyValuePairBST deletedValue =  bst[hashValue].Remove(key).value;
-    return deletedValue;
+    KeyValuePair deletedValue =  bst[hashValue].Remove(key).value;
+    return (KeyValuePair)deletedValue;
 }
 
-KeyValuePairBST* HashTableBSTSeperateChaining::Get(int key)
+KeyValuePair* HashTableBSTSeperateChaining::Get(int key)
 {
     unsigned int hashValue = HashFunction(key);
     Node* node = bst[hashValue].Find(key);

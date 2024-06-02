@@ -12,27 +12,27 @@ Node* BinarySearchTree::findMin(Node* node)
 		return findMin(node->leftChild);
 }
 
-Node* BinarySearchTree::insertRecursivly(Node* node, KeyValuePairBST element)
+Node* BinarySearchTree::insertRecursivly(Node* node, KeyValuePair element)
 {
 	//Jezeli node jest nullptr to stworzony zostaje nowy node, ktorego dzieci sa nullptr
 	if (node == nullptr) {
-		KeyValuePairBST kvp(element.key, element.value);
+		KeyValuePair kvp(element.GetKey(), element.GetValue());
 		Node* newNode = new Node(kvp);
 		newNode->leftChild = nullptr;
 		newNode->rightChild = nullptr;
 		return newNode;
 	}
 	//Jezeli istnieje juz klucz w bst, to zmienia sie jego wartosc na nowa
-	else if (node->value.key == element.key) {
-		node->value.value = element.value;
+	else if (node->value.GetKey() == element.GetKey()) {
+		node->value.SetValue(element.GetValue());
 		return node;
 	}
 	//Jezeli klucz elementu, ktory chcemy dodac jest mniejszy, niz klucz w node, to wywolujemy te sama funckje na jego lewe dziecko
-	else if (element.key < node->value.key) {
+	else if (element.GetKey() < node->value.GetKey()) {
 		node->leftChild = insertRecursivly(node->leftChild, element);
 	}
 	//Jezeli klucz elementu, ktory chcemy dodac jest wiekszy, niz klucz w node, to wywolujemy te sama funckje na jego prawe dziecko
-	else if (element.key > node->value.key) {
+	else if (element.GetKey() > node->value.GetKey()) {
 		node->rightChild = insertRecursivly(node->rightChild, element);
 	}
 	//Na koniec zwracamy node
@@ -45,11 +45,11 @@ Node* BinarySearchTree::removeRecursivly(Node* node, int key, Node& deletedNode,
 		return node;
 	}
 	//Jezeli klucz jest mniejszy niz klucz node, to element do usuniecia znajduje sie po stronie lewego dziecka
-	else if (key < node->value.key) {
+	else if (key < node->value.GetKey()) {
 		node->leftChild = removeRecursivly(node->leftChild, key, deletedNode, found);
 	}
 	//Jezeli klucz jest wiekszy niz klucz node, to element do usuniecia znajduje sie po stronie prwaego dziecka
-	else if (key > node->value.key) {
+	else if (key > node->value.GetKey()) {
 		node->rightChild = removeRecursivly(node->rightChild, key, deletedNode, found);
 	}
 	//Jezeli node ma wartosc klucza
@@ -82,7 +82,7 @@ Node* BinarySearchTree::removeRecursivly(Node* node, int key, Node& deletedNode,
 		else {
 			Node* temp = findMin(node->rightChild);
 			node->value = temp->value;
-			node->rightChild = removeRecursivly(node->rightChild, temp->value.key, deletedNode, found);
+			node->rightChild = removeRecursivly(node->rightChild, temp->value.GetKey(), deletedNode, found);
 		}
 		return node;
 	}
@@ -96,13 +96,13 @@ Node* BinarySearchTree::findRecursivly(Node* node, int key)
 		return nullptr;
 	}
 	//Jezeli znajdzie sie to zwroc odpowiedni node
-	else if (node->value.key == key)
+	else if (node->value.GetKey() == key)
 		return node;
 	//Jezeli szukany key jest mniejszy niz aktualnego node, to sprawdzamy jego lewe dziecko.
-	else if (key < node->value.key)
+	else if (key < node->value.GetKey())
 		return findRecursivly(node->leftChild, key);
 	//Jezeli szukany key jest wiekszy niz aktualnego node, to sprawdzamy jego prawe dziecko.
-	else if(key > node->value.key)
+	else if(key > node->value.GetKey())
 		return findRecursivly(node->rightChild, key);
 }
 
@@ -110,7 +110,7 @@ void BinarySearchTree::PrintElement(Node* node, std::string message) const
 {
 	if (node == nullptr)
 		return;
-	std::cout << message << ":: Key :: " << node->value.key << ", Value :: " << node->value.value << std::endl;
+	std::cout << message << ":: Key :: " << node->value.GetKey() << ", Value :: " << node->value.GetValue() << std::endl;
 
 	PrintElement(node->leftChild, "Left Child");
 	PrintElement(node->rightChild, "Right Child");
@@ -141,7 +141,7 @@ BinarySearchTree::~BinarySearchTree()
 
 void BinarySearchTree::Insert(int key, int value)
 {
-	KeyValuePairBST kvp(key, value);
+	KeyValuePair kvp(key, value);
 
 	root = insertRecursivly(root, kvp);
 	_size++;

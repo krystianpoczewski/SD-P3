@@ -16,14 +16,14 @@ void HashTableOpenAdressing::Resize(int newCapacity)
 {
 	int oldCapacity = _capacity;
 	_capacity = newCapacity;
-	KeyValuePair* newDynamicArray = new KeyValuePair[newCapacity];
+	KeyValuePairOpenAdressing* newDynamicArray = new KeyValuePairOpenAdressing[newCapacity];
 	_size = 0;
 	for (int i = 0; i < oldCapacity; ++i) {
-		if (_dynamicArray[i].state == StateOfKeyValuePair::ADDED) {
+		if (_dynamicArray[i].GetState() == StateOfKeyValuePair::ADDED) {
 			int probeCounter = 0;
-			unsigned int hashValue = HashFunction(_dynamicArray[i].key, probeCounter);
-			while (newDynamicArray[hashValue].state == StateOfKeyValuePair::ADDED) {
-				hashValue = HashFunction(_dynamicArray[i].key, ++probeCounter);
+			unsigned int hashValue = HashFunction(_dynamicArray[i].GetKey(), probeCounter);
+			while (newDynamicArray[hashValue].GetState() == StateOfKeyValuePair::ADDED) {
+				hashValue = HashFunction(_dynamicArray[i].GetKey(), ++probeCounter);
 			}
 			newDynamicArray[hashValue] = _dynamicArray[i];
 			_size++;
@@ -44,7 +44,7 @@ HashTableOpenAdressing::HashTableOpenAdressing()
 	_size = 0;
 	_sizeWithTombstones = 0;
 	_capacity = 8;
-	_dynamicArray = new KeyValuePair[_capacity];
+	_dynamicArray = new KeyValuePairOpenAdressing[_capacity];
 }
 
 void HashTableOpenAdressing::Insert(int key, int value)
@@ -58,20 +58,20 @@ void HashTableOpenAdressing::Insert(int key, int value)
 	int probeCounter = 0;
 	unsigned int hashValue = HashFunction(key, probeCounter);
 
-	while (_dynamicArray[hashValue].state != StateOfKeyValuePair::NOT_INITIALIZED) {
-		if (_dynamicArray[hashValue].key == key) {
-			_dynamicArray[hashValue].value = value;
+	while (_dynamicArray[hashValue].GetState() != StateOfKeyValuePair::NOT_INITIALIZED) {
+		if (_dynamicArray[hashValue].GetKey() == key) {
+			_dynamicArray[hashValue].SetValue(value);
 			return;
 		}
 		hashValue = HashFunction(key, ++probeCounter);
 	}
 
-	_dynamicArray[hashValue] = KeyValuePair(key, value);
+	_dynamicArray[hashValue] = KeyValuePairOpenAdressing(key, value);
 	_size++;
 	_sizeWithTombstones++;
 }
 
-void HashTableOpenAdressing::Remove(int key)
+KeyValuePair HashTableOpenAdressing::Remove(int key)
 {
 	if (_capacity > 8 && ((float)_sizeWithTombstones / _capacity) * 3 <= _loadFactorTreshhold) {
 		Resize(_capacity / 3);
@@ -80,12 +80,12 @@ void HashTableOpenAdressing::Remove(int key)
 
 	int probeCounter = 0;
 	unsigned int hashValue = HashFunction(key, probeCounter);
-	while (_dynamicArray[hashValue].state != StateOfKeyValuePair::NOT_INITIALIZED) {
-		if (_dynamicArray[hashValue].state == StateOfKeyValuePair::ADDED && _dynamicArray[hashValue].key == key) {
-			_dynamicArray[hashValue].state = StateOfKeyValuePair::DELETED;
+	while (_dynamicArray[hashValue].GetState() != StateOfKeyValuePair::NOT_INITIALIZED) {
+		if (_dynamicArray[hashValue].GetState() == StateOfKeyValuePair::ADDED && _dynamicArray[hashValue].GetKey() == key) {
+			_dynamicArray[hashValue].SetState(StateOfKeyValuePair::DELETED);
 			_size--;
 
-			return;
+			return (KeyValuePair)_dynamicArray[hashValue];
 		}
 		hashValue = HashFunction(key, ++probeCounter);
 	}
@@ -93,14 +93,14 @@ void HashTableOpenAdressing::Remove(int key)
 	std::cout << "Unable to find element with specified key" << std::endl;
 }
 
-KeyValuePair HashTableOpenAdressing::Get(int key)
+KeyValuePair* HashTableOpenAdressing::Get(int key)
 {
 	int probeCounter = 0;
 	unsigned int hashValue = HashFunction(key, probeCounter);
 
-	while (_dynamicArray[hashValue].state != StateOfKeyValuePair::NOT_INITIALIZED) {
-		if (_dynamicArray[hashValue].state == StateOfKeyValuePair::ADDED && _dynamicArray[hashValue].key == key) {
-			return _dynamicArray[hashValue];
+	while (_dynamicArray[hashValue].GetState() != StateOfKeyValuePair::NOT_INITIALIZED) {
+		if (_dynamicArray[hashValue].GetState() == StateOfKeyValuePair::ADDED && _dynamicArray[hashValue].GetKey() == key) {
+			return static_cast<KeyValuePair*>(&_dynamicArray[hashValue]);
 		}
 		hashValue = HashFunction(key, ++probeCounter);
 	}
@@ -111,11 +111,11 @@ KeyValuePair HashTableOpenAdressing::Get(int key)
 void HashTableOpenAdressing::PrintAll() const
 {
 	for (int i = 0; i < _capacity; i++) {
-		if (_dynamicArray[i].state != StateOfKeyValuePair::ADDED) {
+		if (_dynamicArray[i].GetState() != StateOfKeyValuePair::ADDED) {
 			std::cout << i << ". NO VALUE" << std::endl;
 		}
 		else {
-			std::cout << i << ". Key :: " << _dynamicArray[i].key << ", Value :: " << _dynamicArray[i].value << std::endl;
+			std::cout << i << ". Key :: " << _dynamicArray[i].GetKey() << ", Value :: " << _dynamicArray[i].GetValue() << std::endl;
 		}
 	}
 }
@@ -136,5 +136,5 @@ void HashTableOpenAdressing::Clear()
 	_size = 0;
 	_sizeWithTombstones = 0;
 	_capacity = 8;
-	_dynamicArray = new KeyValuePair[_capacity];
+	_dynamicArray = new KeyValuePairOpenAdressing[_capacity];
 }
