@@ -123,6 +123,7 @@ void BinarySearchTree::ClearRecursivly(Node* node)
 	ClearRecursivly(node->leftChild);
 	ClearRecursivly(node->rightChild);
 	delete node;
+	node = nullptr;
 }
 
 BinarySearchTree::BinarySearchTree()
@@ -201,5 +202,6 @@ void BinarySearchTree::Clear()
 	if (isEmpty())
 		return;
 	ClearRecursivly(root);
+	root = nullptr;
 	_size = 0;
 }

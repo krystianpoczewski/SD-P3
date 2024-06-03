@@ -11,6 +11,71 @@
 
 
 
+std::string OperationName(int operation) {
+    return operation == 0 ? "Insert" : "Remove";
+}
+
+void Tests(Dictionary* dict, std::string fileName) {
+    std::ofstream file(fileName);
+    if (!file.is_open()) {
+        std::cout << "Can't open the file: " << fileName << std::endl;
+        return;
+    }
+
+    int sizes[] = { 5000, 8000, 10000, 16000, 20000, 40000, 60000, 100000 };
+    int testCount = 100;
+
+    const int min = 0;
+    const int max = 1000000;
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(min, max);
+    for (int operation = 0; operation < 2; operation++) {
+        file << OperationName(operation) << std::endl;
+        for (int size : sizes) {
+            long long totalTime = 0;
+            std::uniform_int_distribution<int> distributionOfRandomIndex(0, size);
+            for (int test = 0; test < testCount; test++) {
+                dict->Clear();
+                int keyToRemove{};
+                int indexToRemove = distributionOfRandomIndex(generator);
+                for (int i = 0; i < size; i++) {
+                    int oldSize = dict->GetSize();
+                    int keyInserted = distribution(generator);
+                    dict->Insert(keyInserted, distribution(generator));
+                    if (oldSize + 1 != dict->GetSize()) {
+                        i--;
+                    }
+                    else {
+                        if (i == indexToRemove) {
+                            keyToRemove = keyInserted;
+                        }
+                    }
+                }
+                auto start = std::chrono::high_resolution_clock::now();
+                auto stop = std::chrono::high_resolution_clock::now();
+                switch (operation) {
+                case 0:
+                    start = std::chrono::high_resolution_clock::now();
+                    dict->Insert(distribution(generator), distribution(generator));
+                    stop = std::chrono::high_resolution_clock::now();
+                    totalTime += std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
+                    break;
+                case 1:
+                    start = std::chrono::high_resolution_clock::now();
+                    dict->Remove(keyToRemove);
+                    stop = std::chrono::high_resolution_clock::now();
+                    totalTime += std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
+                    break;
+                }
+            }
+            file << size << "," << totalTime / testCount << std::endl;
+        }
+    }
+    file.close();
+}
+
+
+
 std::string GetNameOfDataStructure(short selection) {
     switch (selection) {
     case 1:
@@ -37,6 +102,9 @@ Dictionary* CreateEmpty(short selection) {
 
 int main()
 {
+    //Tests(new Dictionary(1), "Open Adressing.txt");
+    //Tests(new Dictionary(2), "Separate Chaining.txt");
+    Tests(new Dictionary(3), "Cuckoo Hashing.txt");
     std::cout << "Select your type of dictionary:" << std::endl;
     std::cout << "1. Dictionary based on hash table with open adressing" << std::endl;
     std::cout << "2. Dictionary based on hash table with seperate chaining with Binary Search Tree" << std::endl;

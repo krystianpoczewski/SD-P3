@@ -1,7 +1,7 @@
 #pragma once
 #include "HashTable.h"
 
-//HASH TABLE WITH OPEN ADDRESSING AND QUADRIATIC PROBING
+//HASH TABLE WITH OPEN ADDRESSING AND LINEAR PROBING
 
 class HashTableOpenAdressing : public HashTable
 {

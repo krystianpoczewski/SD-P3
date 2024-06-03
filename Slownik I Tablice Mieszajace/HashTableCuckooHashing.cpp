@@ -3,178 +3,174 @@
 
 void HashTableCuckooHashing::Resize(int newCapacity)
 {
-	int oldCapacity = _capacity;
-	_capacity = newCapacity;
+    int oldCapacity = _capacity;
+    _capacity = newCapacity;
+    _cycleTreshhold = _capacity / 2;
+    _size = 0;
+    KeyValuePairCuckoo* tempT1 = T1;
+    KeyValuePairCuckoo* tempT2 = T2;
 
-	KeyValuePairCuckoo** oldHashTable = _hashTable;
-	_hashTable = InitTable(_capacity);
-	_size = 0;
-	for (int i = 0; i < _numberOfTables; i++) {
-		for (int j = 0; j < oldCapacity; j++) {
-			if (oldHashTable[i][j].GetState()) {
-				Insert(oldHashTable[i][j].GetKey(), oldHashTable[i][j].GetValue());
-			}
-		}
-	}
-	_cycleTreshhold = _capacity / 2;
+    InitTable();
+
+    for (int i = 0; i < oldCapacity / 2; i++) {
+        if (tempT1[i].GetState()) {
+            Insert(tempT1[i].GetKey(), tempT1[i].GetValue());
+        }
+        if (tempT2[i].GetState()) {
+            Insert(tempT2[i].GetKey(), tempT2[i].GetValue());
+        }
+    }
+
+    delete[] tempT1;
+    delete[] tempT2;
 }
 
-unsigned int HashTableCuckooHashing::HashFunction(int key, int tableID)
+unsigned int HashTableCuckooHashing::HashFunction(int key, int tableID) const
 {
-	return tableID == 0 ? key % _capacity : (key / _capacity) % _capacity;
+    if (key < 0) key = -key;
+    return tableID == 0 ? key % (_capacity / 2) : (key / (_capacity / 2)) % (_capacity / 2);
 }
 
 void HashTableCuckooHashing::Rehash(int key, int value)
 {
-	KeyValuePairCuckoo** oldArr = _hashTable;
-	_hashTable = InitTable(_capacity);
-	_size = 0;
-	for (int i = 0; i < _numberOfTables; i++) {
-		for (int j = 0; j < _capacity; j++) {
-			if (oldArr[i][j].GetState()) {
-				Insert(oldArr[i][j].GetKey(), oldArr[i][j].GetValue());
-			}
-		}
-	}
-	Insert(key, value);
+    Resize(_capacity * 2);
+    Insert(key, value);
 }
 
-KeyValuePairCuckoo** HashTableCuckooHashing::InitTable(int capacity)
+void HashTableCuckooHashing::InitTable()
 {
-	KeyValuePairCuckoo** arr = new KeyValuePairCuckoo * [capacity];
-
-	for (int i = 0; i < _numberOfTables; i++) {
-		arr[i] = new KeyValuePairCuckoo[capacity];
-	}
-	return arr;
+    T1 = new KeyValuePairCuckoo[_capacity / 2];
+    T2 = new KeyValuePairCuckoo[_capacity / 2];
 }
-
-
 
 HashTableCuckooHashing::~HashTableCuckooHashing()
 {
-	for (int i = 0; i < _numberOfTables; i++) {
-		delete[] _hashTable[i];
-	}
-	delete [] _hashTable;
+    delete[] T1;
+    delete[] T2;
 }
 
 HashTableCuckooHashing::HashTableCuckooHashing()
 {
-	_size = 0;
-	_capacity = 8;
-	_cycleTreshhold = _capacity / 2;
-	_hashTable = InitTable(_capacity);
+    _size = 0;
+    _capacity = 20;
+    _cycleTreshhold = _capacity / 2;
+    InitTable();
 }
 
 void HashTableCuckooHashing::Insert(int key, int value)
 {
-	if (((float)_size / (_capacity*2)) >= _loadFactorTreshold)
-	{
-		Resize(_capacity * 2);
-	}
-	
-	int count = 0;
-	int tableID = 0;
+    if (_size >= _capacity / 2) {
+        Resize(_capacity * 2);
+    }
 
-	int currentKey = key;
-	int currentValue = value;
+    unsigned int pos;
+    int cycleCount = 0;
+    while (cycleCount < _cycleTreshhold) {
+        pos = HashFunction(key, 0);
+        if (!T1[pos].GetState() || T1[pos].GetKey() == key) {
+            if (!T1[pos].GetState()) _size++;
+            T1[pos] = KeyValuePairCuckoo(key, value);
+            return;
+        }
 
-	while (count <= _cycleTreshhold) {
-		unsigned int index = HashFunction(currentKey, tableID);
+        int tempKey = T1[pos].GetKey();
+        int tempVal = T1[pos].GetValue();
+        T1[pos].SetKey(key);
+        T1[pos].SetValue(value);
+        key = tempKey;
+        value = tempVal;
 
-		if (_hashTable[tableID][index].GetState() && _hashTable[tableID][index].GetKey() == key) {
-			_hashTable[tableID][index].SetValue(value);
-			return;
-		}
+        pos = HashFunction(key, 1);
+        if (!T2[pos].GetState() || T2[pos].GetKey() == key) {
+            if (!T2[pos].GetState()) _size++;
+            T2[pos] = KeyValuePairCuckoo(key, value);
+            return;
+        }
 
-		if (!_hashTable[tableID][index].GetState()) {
-			_hashTable[tableID][index] = KeyValuePairCuckoo(currentKey, currentValue);
-			_size++;
-			return;
-		}
-
-		int tempKey = _hashTable[tableID][index].GetKey();
-		int tempValue = _hashTable[tableID][index].GetValue();
-
-		_hashTable[tableID][index].SetKey(currentKey);
-		_hashTable[tableID][index].SetValue(currentValue);
-		currentKey = tempKey;
-		currentValue = tempValue;
-
-		tableID = (tableID + 1) % 2;
-		count++;
-	}
-	Rehash(currentKey, currentValue);
+        tempKey = T2[pos].GetKey();
+        tempVal = T2[pos].GetValue();
+        T2[pos].SetKey(key);
+        T2[pos].SetValue(value);
+        key = tempKey;
+        value = tempVal;
+        cycleCount++;
+    }
+    Rehash(key, value);
 }
 
 KeyValuePair HashTableCuckooHashing::Remove(int key)
 {
-	if (_capacity > 8 && (float)_size / _capacity <= _loadFactorTreshold * 2)
-	{
-		Resize(_capacity / 2);
-	}
+    KeyValuePairCuckoo deletedKVP;
+    int pos1 = HashFunction(key, 0);
+    if (T1[pos1].GetKey() == key) {
+        deletedKVP = T1[pos1];
+        T1[pos1] = KeyValuePairCuckoo();
+        _size--;
+        return deletedKVP;
+    }
 
-
-	for (int i = 0; i < _numberOfTables; i++) {
-		unsigned int pos = HashFunction(key, i);
-		if (_hashTable[i][pos].GetKey() == key) {
-			KeyValuePairCuckoo temp = _hashTable[i][pos];
-			_hashTable[i][pos] = KeyValuePairCuckoo();
-			return (KeyValuePair)temp;
-		}
-	}
-	std::cout << "Unable to find this key in hash table" << std::endl;
-	_size--;
-	return KeyValuePairCuckoo();
+    int pos2 = HashFunction(key, 1);
+    if (T2[pos2].GetKey() == key) {
+        deletedKVP = T2[pos2];
+        T2[pos2] = KeyValuePairCuckoo();
+        _size--;
+        return deletedKVP;
+    }
+    std::cout << "Unable to find element with specified key" << std::endl;
+    return KeyValuePair();
 }
 
 KeyValuePair* HashTableCuckooHashing::Get(int key)
 {
-	for (int i = 0; i < _numberOfTables; i++) {
-		unsigned int pos = HashFunction(key, i);
-		if (_hashTable[i][pos].GetKey() == key) {
-			KeyValuePairCuckoo* temp = &_hashTable[i][pos];
-			return temp;
-		}
-	}
-	std::cout << "Unable to find this key in hash table" << std::endl;
-	return nullptr;
+    int pos1 = HashFunction(key, 0);
+    if (T1[pos1].GetKey() == key) {
+        return &T1[pos1];
+    }
+
+    int pos2 = HashFunction(key, 1);
+    if (T2[pos2].GetKey() == key) {
+        return &T2[pos2];
+    }
+    std::cout << "Unable to find element with specified key" << std::endl;
+    return nullptr;
 }
 
 void HashTableCuckooHashing::PrintAll() const
 {
-	for (int i = 0; i < _numberOfTables; i++) {
-		std::cout << "Table number " << i << "." << std::endl;
-		for (int j = 0; j < _capacity; j++) {
-			if (_hashTable[i][j].GetState())
-				std::cout << j << ". KEY::" << _hashTable[i][j].GetKey() << ", VALUE::" << _hashTable[i][j].GetValue() << std::endl;
-			else
-				std::cout << j << ". NOT ADDED" << std::endl;
-		}
-	}
+    std::cout << "First Table" << std::endl;
+    for (int i = 0; i < _capacity / 2; i++) {
+        if (T1[i].GetState())
+            std::cout << i << ". KEY :: " << T1[i].GetKey() << ", VALUE :: " << T1[i].GetValue() << std::endl;
+        else {
+            std::cout << i << ". NO VALUE" << std::endl;
+        }
+    }
+    std::cout << "Second Table" << std::endl;
+    for (int i = 0; i < _capacity / 2; i++) {
+        if (T2[i].GetState())
+            std::cout << i << ". KEY :: " << T2[i].GetKey() << ", VALUE :: " << T2[i].GetValue() << std::endl;
+        else {
+            std::cout << i << ". NO VALUE" << std::endl;
+        }
+    }
 }
 
 int HashTableCuckooHashing::GetSize() const
 {
-	return _size;
+    return _size;
 }
 
 void HashTableCuckooHashing::Clear()
 {
-	for (int i = 0; i < _numberOfTables; i++) {
-		delete[] _hashTable[i];
-	}
-	delete[] _hashTable;
-	_size = 0;
-	_capacity = 8;
-	_hashTable = new KeyValuePairCuckoo * [_numberOfTables];
-	for (int i = 0; i < _numberOfTables; i++) {
-		_hashTable[i] = new KeyValuePairCuckoo[_capacity];
-	}
+    delete[] T1;
+    delete[] T2;
+    _size = 0;
+    _capacity = 20;
+    _cycleTreshhold = _capacity / 2;
+    InitTable();
 }
 
 bool HashTableCuckooHashing::IsEmpty() const
 {
-	return _size == 0;
+    return _size == 0;
 }

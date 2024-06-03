@@ -7,9 +7,7 @@
 
 unsigned int HashTableOpenAdressing::HashFunction(int key, int probeCounter) const
 {
-	if (key < 0)
-		key *= -1;
-	return (key + probeCounter * probeCounter + probeCounter) % _capacity;
+	return (key + probeCounter) % _capacity;
 }
 
 void HashTableOpenAdressing::Resize(int newCapacity)
@@ -18,7 +16,7 @@ void HashTableOpenAdressing::Resize(int newCapacity)
 	_capacity = newCapacity;
 	KeyValuePairOpenAdressing* newDynamicArray = new KeyValuePairOpenAdressing[newCapacity];
 	_size = 0;
-	for (int i = 0; i < oldCapacity; ++i) {
+	for (int i = 0; i < oldCapacity; i++) {
 		if (_dynamicArray[i].GetState() == StateOfKeyValuePair::ADDED) {
 			int probeCounter = 0;
 			unsigned int hashValue = HashFunction(_dynamicArray[i].GetKey(), probeCounter);
@@ -51,7 +49,7 @@ void HashTableOpenAdressing::Insert(int key, int value)
 {
 	//RESIZING
 	if ((float)_sizeWithTombstones / _capacity >= _loadFactorTreshhold) {
-		Resize(_capacity * 3);
+		Resize(_capacity * 2);
 	}
 
 	//INSERTING

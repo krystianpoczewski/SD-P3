@@ -6,16 +6,14 @@
 class HashTableCuckooHashing : public HashTable
 {
 private:
-	int _size;
-	int _capacity;
-	const float _loadFactorTreshold = 0.5;
-	int _cycleTreshhold;
-	const int _numberOfTables = 2;
-	KeyValuePairCuckoo** _hashTable;
+	int _size, _capacity, _cycleTreshhold;
+	const float _loadFactorTreshhold = 0.5;
+	KeyValuePairCuckoo* T1;
+	KeyValuePairCuckoo* T2;
 	void Resize(int newCapacity);
-	unsigned int HashFunction(int key, int tableID);
+	unsigned int HashFunction(int key, int tableID) const;
 	void Rehash(int key, int value);
-	KeyValuePairCuckoo** InitTable(int newCapacity);
+	void InitTable();
 
 public:
 	~HashTableCuckooHashing();
