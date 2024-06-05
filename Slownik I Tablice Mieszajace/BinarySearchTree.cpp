@@ -58,7 +58,7 @@ Node* BinarySearchTree::removeRecursivly(Node* node, int key, Node& deletedNode,
 			deletedNode = *node;
 			found = true;
 		}
-			
+
 		//Przypadek 1: Node nie ma dzieci
 		if (node->leftChild == nullptr && node->rightChild == nullptr) {
 			delete node;
@@ -72,7 +72,7 @@ Node* BinarySearchTree::removeRecursivly(Node* node, int key, Node& deletedNode,
 			node = node->rightChild;
 			delete temp;
 		}
-		else if(node->rightChild == nullptr) {
+		else if (node->rightChild == nullptr) {
 			//Node ma tylko lewe dziecko, wiec ptr node wskazuje na dziecko ktore posiada, a nastepnie sie go usuwa.
 			Node* temp = node;
 			node = node->leftChild;
@@ -102,7 +102,7 @@ Node* BinarySearchTree::findRecursivly(Node* node, int key)
 	else if (key < node->value.GetKey())
 		return findRecursivly(node->leftChild, key);
 	//Jezeli szukany key jest wiekszy niz aktualnego node, to sprawdzamy jego prawe dziecko.
-	else if(key > node->value.GetKey())
+	else if (key > node->value.GetKey())
 		return findRecursivly(node->rightChild, key);
 }
 
@@ -168,7 +168,7 @@ Node* BinarySearchTree::Find(int value)
 {
 	if (root == nullptr)
 		throw std::out_of_range("BST is empty!");
-	
+
 
 	Node* tempForSearching = findRecursivly(root, value);
 	if (tempForSearching == nullptr) {
@@ -204,4 +204,9 @@ void BinarySearchTree::Clear()
 	ClearRecursivly(root);
 	root = nullptr;
 	_size = 0;
+}
+
+Node* BinarySearchTree::GetRoot() const
+{
+	return root;
 }

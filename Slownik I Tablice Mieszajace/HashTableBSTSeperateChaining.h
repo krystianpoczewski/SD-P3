@@ -6,9 +6,13 @@
 class HashTableBSTSeperateChaining : public HashTable, protected BinarySearchTree
 {
 private:
+	int _size;
+	const float _loadFactorTreshold = 0.8;
+	void resize(int newSize);
 	BinarySearchTree* bst;
 	int numberOfBuckets;
 	unsigned int HashFunction(int key);
+	void InsertIntoArray(Node* node, BinarySearchTree* arr, int size);
 public:
 	~HashTableBSTSeperateChaining();
 	HashTableBSTSeperateChaining();
@@ -20,4 +24,3 @@ public:
 	bool IsEmpty() const override;
 	void Clear() override;
 };
-

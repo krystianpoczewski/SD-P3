@@ -7,7 +7,7 @@ struct Node {
 	Node* leftChild;
 	Node* rightChild;
 	Node(KeyValuePair value) : value(value) {}
-	Node(){ }
+	Node() { }
 };
 
 class BinarySearchTree
@@ -17,7 +17,7 @@ private:
 	int _size;
 	Node* findMin(Node* node);
 	Node* insertRecursivly(Node* node, KeyValuePair element);
-	Node* removeRecursivly(Node* node, int key,Node& deletedNode, bool& found);
+	Node* removeRecursivly(Node* node, int key, Node& deletedNode, bool& found);
 	Node* findRecursivly(Node* node, int key);
 	void PrintElement(Node* node, std::string message) const;
 	void ClearRecursivly(Node* node);
@@ -31,5 +31,5 @@ public:
 	int GetSize() const;
 	void PrintAll() const;
 	void Clear();
+	Node* GetRoot() const;
 };
-

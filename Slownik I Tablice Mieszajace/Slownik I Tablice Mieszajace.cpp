@@ -102,9 +102,15 @@ Dictionary* CreateEmpty(short selection) {
 
 int main()
 {
-    //Tests(new Dictionary(1), "Open Adressing.txt");
-    //Tests(new Dictionary(2), "Separate Chaining.txt");
-    Tests(new Dictionary(3), "Cuckoo Hashing.txt");
+    //Tests(new Dictionary(1), "Open Adressing1.txt");
+    Tests(new Dictionary(2), "FIXED Separate Chaining1.txt");
+    //Tests(new Dictionary(3), "Cuckoo Hashing2.txt");
+    //Tests(new Dictionary(1), "Open Adressing2.txt");
+    Tests(new Dictionary(2), "FIXED Separate Chaining3.txt");
+    //Tests(new Dictionary(3), "Cuckoo Hashing3.txt");
+    //Tests(new Dictionary(1), "Open Adressing3.txt");
+    Tests(new Dictionary(2), "FIXED Separate Chaining3.txt");
+    //Tests(new Dictionary(3), "Cuckoo Hashing1.txt");
     std::cout << "Select your type of dictionary:" << std::endl;
     std::cout << "1. Dictionary based on hash table with open adressing" << std::endl;
     std::cout << "2. Dictionary based on hash table with seperate chaining with Binary Search Tree" << std::endl;
