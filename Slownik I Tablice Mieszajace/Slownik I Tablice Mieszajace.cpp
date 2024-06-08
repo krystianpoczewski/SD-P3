@@ -106,7 +106,7 @@ int main()
     Tests(new Dictionary(2), "FIXED Separate Chaining1.txt");
     //Tests(new Dictionary(3), "Cuckoo Hashing2.txt");
     //Tests(new Dictionary(1), "Open Adressing2.txt");
-    Tests(new Dictionary(2), "FIXED Separate Chaining3.txt");
+    Tests(new Dictionary(2), "FIXED Separate Chaining2.txt");
     //Tests(new Dictionary(3), "Cuckoo Hashing3.txt");
     //Tests(new Dictionary(1), "Open Adressing3.txt");
     Tests(new Dictionary(2), "FIXED Separate Chaining3.txt");

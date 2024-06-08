@@ -5,21 +5,14 @@
 void HashTableBSTSeperateChaining::resize(int newSize)
 {
     BinarySearchTree* newArray = new BinarySearchTree[newSize];
-
-    // Iterate over each bucket in the current array
+    //Przejscie przez kazdy bucket i dodawanie kazdego elementu do nowego bucketa w nowej tablicy
     for (int i = 0; i < numberOfBuckets; ++i) {
-        // Get the root node of the BST in the current bucket
         Node* rootNode = bst[i].GetRoot();
-
-        // Traverse the BST and reinsert each node into the new array
         InsertIntoArray(rootNode, newArray, newSize);
         bst[i].Clear();
     }
-
-    // Delete the current array
     delete[] bst;
 
-    // Update the array pointer and the number of buckets
     bst = newArray;
     numberOfBuckets = newSize;
 }
@@ -34,15 +27,12 @@ void HashTableBSTSeperateChaining::InsertIntoArray(Node* node, BinarySearchTree*
 {
     if (node == nullptr)
         return;
-
-    // Traverse the left subtree
+    //Przejscie przez wszystkie elementy BST i dodanie ich do nowej tablicy
     InsertIntoArray(node->leftChild, arr, newSize);
 
-    // Reinsert the current node into the new array based on the updated hash function
     unsigned int hashValue = node->value.GetKey() % newSize;
     arr[hashValue].Insert(node->value.GetKey(), node->value.GetValue());
 
-    // Traverse the right subtree
     InsertIntoArray(node->rightChild, arr, newSize);
 }
 

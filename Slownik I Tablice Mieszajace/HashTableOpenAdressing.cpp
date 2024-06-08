@@ -47,12 +47,10 @@ HashTableOpenAdressing::HashTableOpenAdressing()
 
 void HashTableOpenAdressing::Insert(int key, int value)
 {
-	//RESIZING
 	if ((float)_sizeWithTombstones / _capacity >= _loadFactorTreshhold) {
 		Resize(_capacity * 2);
 	}
 
-	//INSERTING
 	int probeCounter = 0;
 	unsigned int hashValue = HashFunction(key, probeCounter);
 
